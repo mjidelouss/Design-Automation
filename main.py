@@ -10,25 +10,24 @@ import glob
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-def open_data(folder_name, font_title_path, font_post_path):
+def open_data(folder_name):
     file_path = READY / folder_name / 'test.csv'
 
     with open(file_path, "r", newline="") as data:
         reader = csv.reader(data)
         for row in reader:
-            create_image(row, folder_name, font_title_path, font_post_path)
+            create_image(row, folder_name)
 
 def get_font(font_path, font_size):
     font = ImageFont.truetype(font_path, font_size)
     return font
 
 
-def create_image(row, folder_name, font_title_path, font_post_path):
+def create_image(row, folder_name):
     # Load fonts
-    font_title = ImageFont.load_default()
-
+    font_title = ImageFont.load_default(60)
     # Create new image
-    im = Image.new('RGBA', (1000, 1500))
+    im = Image.new('RGBA', (2875, 3900))
     width, height = im.size
 
     # Select random background image
@@ -39,15 +38,20 @@ def create_image(row, folder_name, font_title_path, font_post_path):
     im.paste(img_open, (0, 0))
 
     if row:  # Check if the row is not empty
+
         # Combine all the text in the row
         title_text = ' '.join(row)
 
         # Get the size of the text to calculate the position
         draw = ImageDraw.Draw(im)
-        title_width = draw.textlength(title_text, font=font_title)
-        title_height = draw.textlength(title_text, font=font_title)
 
-        title_position = ((width - title_width) / 2, (height - title_height) / 2)
+        # Calculate the size of the text
+        text_width = draw.textlength(title_text, font=font_title)
+        text_height = draw.textlength(title_text, font=font_title)
+
+        # Set starting position
+        x = (width - text_width) / 2
+        y = (height - text_height) / 2
 
         # Determine background color based on image
         if 'black' in img:
@@ -55,9 +59,8 @@ def create_image(row, folder_name, font_title_path, font_post_path):
         else:
             title_color = 'black'
 
-        # Draw the title text at the center of the image
-        draw.text(title_position, title_text,
-                  font=font_title, fill=title_color, align='center', font_size=130)
+        # Draw the title text
+        draw.text((x, y), title_text, font=font_title, fill=title_color, align='center')
 
         # Save the image
         images_dir = READY / folder_name / 'images'
@@ -77,4 +80,4 @@ if __name__ == '__main__':
     project_folder = 'Keto'
     font_title_path = READY / project_folder / 'assets' / 'fonts' / 'title_font.ttf'
     font_post_path = READY / project_folder / 'assets' / 'fonts' / 'post_font.otf'
-    open_data(project_folder, font_title_path, font_post_path)
+    open_data(project_folder)
