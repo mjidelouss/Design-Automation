@@ -1,9 +1,9 @@
 import os
+import re
 import uuid
-
 from constants import *
 from PIL import Image, ImageDraw, ImageFont
-from pilmoji import Pilmoji
+
 import csv
 from random import randint
 import glob
@@ -37,8 +37,7 @@ def create_image(row, folder_name):
     img_open = Image.open(img)
     im.paste(img_open, (0, 0))
 
-    if row:  # Check if the row is not empty
-
+    if row:
         # Combine all the text in the row
         title_text = ' '.join(row)
 
@@ -53,14 +52,29 @@ def create_image(row, folder_name):
         x = (width - text_width) / 2
         y = (height - text_height) / 2
 
-        # Determine background color based on image
-        if 'black' in img:
-            title_color = 'white'
-        else:
-            title_color = 'black'
+        # Split the title_text into parts based on delimiters
+        split_text = re.split(r'\s*:\s*', title_text)
 
-        # Draw the title text
-        draw.text((x, y), title_text, font=font_title, fill=title_color, align='center')
+        # Calculate the height of each line of text
+        line_height = text_height // len(split_text)
+
+        # Calculate the position to start printing the text
+        x = (im.width - text_width) / 2
+        y = (im.height - text_height) / 2
+
+        # Loop through each part of the split text and print them one under the other
+        for part in split_text:
+            # Calculate the width and height of the current part of text
+            part_width = draw.textlength(title_text, font=font_title)
+            part_height = draw.textlength(title_text, font=font_title)
+
+            # Calculate the position to center the current part of text horizontally
+            x_part = (im.width - part_width) / 2
+            # Draw the current part of text
+            draw.text((x_part, y), part, font=font_title, fill='white', align='center')
+
+            # Move the y position down for the next part of text
+            y += 90
 
         # Save the image
         images_dir = READY / folder_name / 'images'
