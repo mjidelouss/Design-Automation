@@ -25,7 +25,7 @@ def get_font(font_path, font_size):
 
 def create_image(row, folder_name):
     # Load fonts
-    font_title = ImageFont.truetype('C:\Windows\Fonts\Papyrus.ttf', 60)
+    font_title = ImageFont.truetype('C:\Windows\Fonts\Papyrus.ttf', 85)
     # Create new image
     im = Image.new('RGBA', (2875, 3900))
     width, height = im.size
@@ -83,7 +83,7 @@ def create_image(row, folder_name):
                     else:
                         draw.text((x_part, y), part, font=font_title, fill=(255, 255, 0, 128), align='center')
             # Move the y position down for the next part of text
-            y += 90
+            y += 100
 
         # Save the image
         images_dir = READY / folder_name / 'images'
