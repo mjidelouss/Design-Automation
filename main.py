@@ -70,9 +70,18 @@ def create_image(row, folder_name):
 
             # Calculate the position to center the current part of text horizontally
             x_part = (im.width - part_width) / 2
-            # Draw the current part of text
-            draw.text((x_part, y), part, font=font_title, fill='white', align='center')
 
+            # Draw the current part of text
+            if len(split_text) == 1:
+                draw.text((x_part, y), part, font=font_title, fill='white', align='center')
+            else:
+                if part == split_text[0]:
+                    draw.text((x_part, y), part, font=font_title, fill=(255, 0, 0, 128), align='center')
+                else:
+                    if part == split_text[len(split_text) - 1]:
+                        draw.text((x_part, y), part, font=font_title, fill='white', align='center')
+                    else:
+                        draw.text((x_part, y), part, font=font_title, fill=(255, 255, 0, 128), align='center')
             # Move the y position down for the next part of text
             y += 90
 
