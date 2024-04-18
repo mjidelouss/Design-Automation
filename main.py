@@ -25,7 +25,7 @@ def get_font(font_path, font_size):
 
 def create_image(row, folder_name):
     # Load fonts
-    font_title = ImageFont.load_default(60)
+    font_title = ImageFont.truetype('C:\Windows\Fonts\Papyrus.ttf', 60)
     # Create new image
     im = Image.new('RGBA', (2875, 3900))
     width, height = im.size
